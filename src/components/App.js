@@ -1,5 +1,8 @@
 import "../styles/App.scss";
 import { useState } from "react";
+import Header from "./Header";
+import HangmanError from "./HangmanError";
+import SolutionLetters from "./SolutionLetters";
 
 function App() {
   //Variables de estado
@@ -24,12 +27,16 @@ function App() {
 
   const renderErrorLetters = () => {
     const wordLetters = word.split(""); //para convertir el string en array [k,a,t,a...]
-    const htmlArray = wordLetters.filter((eachLetter) => {
-      console.log(wordLetters);
-      return eachLetter !== userLetters;
-      console.log(htmlArray);
+    const htmlArray = userLetters.filter(
+      (eachLetter) => word.includes(eachLetter) === false
+    );
+    return htmlArray.map((eachLetter, index) => {
+      return (
+        <li className="letter" key={index}>
+          {eachLetter}
+        </li>
+      );
     });
-    return <li className="letter">{userLetters}</li>;
   };
 
   // return htmlArray;
@@ -45,36 +52,18 @@ function App() {
     increment();
     //setLastLetter('');
   };
-  /*
-  const handleClick = () => {
-    fetch(`https://random-words-api.vercel.app/word`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data[0].word);
-        console.log(data[0].word.length);
-        const info = data;
-       
-  for (let index = 0 ; index< info.word.length; index ++){
-console.log(info.word.length);
 
- 
-      });
-  };
- }*/
-  //------------------------------------------------------------------------------
   return (
     <div className="App">
       <div className="page">
-        <header>
-          <h1 className="header__title">Juego del ahorcado</h1>
-        </header>
+        <Header> </Header>
         <main className="main">
           <section>
-            <div className="solution">
-              <h2 className="title">Solución:</h2>
-
-              <ul className="letters">{renderSolutionLetters()}</ul>
-            </div>
+            <SolutionLetters
+              word={word}
+              userLetters={userLetters}
+              renderSolutionLetters={renderSolutionLetters}
+            ></SolutionLetters>
             <div className="error">
               <h2 className="title">Letras falladas:</h2>
               <ul className="letters">{renderErrorLetters()}</ul>
@@ -96,21 +85,7 @@ console.log(info.word.length);
               />
             </form>
           </section>
-          <section className={"dummy error-" + numberOfErrors}>
-            <span className="error-13 eye"></span>
-            <span className="error-12 eye"></span>
-            <span className="error-11 line"></span>
-            <span className="error-10 line"></span>
-            <span className="error-9 line"></span>
-            <span className="error-8 line"></span>
-            <span className="error-7 line"></span>
-            <span className="error-6 head"></span>
-            <span className="error-5 line"></span>
-            <span className="error-4 line"></span>
-            <span className="error-3 line"></span>
-            <span className="error-2 line"></span>
-            <span className="error-1 line"></span>
-          </section>
+          <HangmanError numberOfErrors={numberOfErrors}></HangmanError>
         </main>
       </div>
     </div>
